@@ -1,5 +1,6 @@
 from help import check_get
 from jsonschema import validate
+from os.path import normpath
 from requests import Response
 from typing import Optional
 import pytest
@@ -60,3 +61,16 @@ def test_image(url: str):
                          ])
 def test_get_list(url: str):
     check_response(url, CONTENT_LIST_SCHEMA)
+
+
+@pytest.mark.parametrize("url, count",
+                         [
+                             pytest.param("https://dog.ceo/api/breed/hound/images/random", 3,
+                                          id="from_a_breed_collection"),
+                             pytest.param("https://dog.ceo/api/breed/hound/afghan/images/random", 3,
+                                          id="from_a_sub_breed_collection")
+                         ])
+def test_multiple_images(url: str, count: int):
+    full_url = f"{url}/{count}"
+    response: Response = check_response(full_url, CONTENT_LIST_SCHEMA)
+    assert len(response.json().get(MESSAGE)) <= count, f"More than {count} images have been received"
