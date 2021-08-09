@@ -1,4 +1,4 @@
-#API Testing Homework
+# API Testing Homework
 
 Цель:
 Поучиться тестировать API сервисов на основе их документации.
