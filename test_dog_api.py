@@ -74,3 +74,17 @@ def test_multiple_images(url: str, count: int):
     full_url = f"{url}/{count}"
     response: Response = check_response(full_url, CONTENT_LIST_SCHEMA)
     assert len(response.json().get(MESSAGE)) <= count, f"More than {count} images have been received"
+
+
+def test_all_breeds():
+    CONTENT_SCHEMA = {
+        "type": "object",
+        "properties": {
+            MESSAGE: {
+                "type": "object",
+                "items": {"type": "array"}
+            },
+            STATUS: {"type": "string"}
+        }
+    }
+    check_response("https://dog.ceo/api/breeds/list/all", CONTENT_SCHEMA)
